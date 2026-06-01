@@ -3,11 +3,14 @@ import { Link, useLocation } from "react-router-dom";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import logo from "@/assets/Logo.png";
+import { useAuth } from "@/hooks/useAuth";
+import { LogIn, User } from "lucide-react";
 
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const location = useLocation();
+  const { user } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,9 +74,16 @@ const Header = () => {
 
           {/* CTA Button */}
           <div className="hidden lg:block">
-            <Button variant="gold" size="default" asChild>
-              <Link to="/contato">Aula Gratuita</Link>
-            </Button>
+            <div className="flex items-center gap-3">
+              <Button variant="outline" size="default" asChild>
+                <Link to={user ? "/app/dashboard" : "/auth"}>
+                  {user ? <><User className="w-4 h-4" /> Área do Aluno</> : <><LogIn className="w-4 h-4" /> Entrar</>}
+                </Link>
+              </Button>
+              <Button variant="gold" size="default" asChild>
+                <Link to="/contato">Aula Gratuita</Link>
+              </Button>
+            </div>
           </div>
 
           {/* Mobile Menu Button */}
