@@ -14,16 +14,201 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      attendance: {
+        Row: {
+          attended_at: string
+          class_id: string
+          created_at: string
+          id: string
+          notes: string | null
+          professor_id: string | null
+          profile_id: string
+        }
+        Insert: {
+          attended_at?: string
+          class_id: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          professor_id?: string | null
+          profile_id: string
+        }
+        Update: {
+          attended_at?: string
+          class_id?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          professor_id?: string | null
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "attendance_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_professor_id_fkey"
+            columns: ["professor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      belts: {
+        Row: {
+          classes_to_next_belt: number | null
+          color_hex: string
+          created_at: string
+          id: string
+          name: string
+          rank_order: number
+        }
+        Insert: {
+          classes_to_next_belt?: number | null
+          color_hex: string
+          created_at?: string
+          id?: string
+          name: string
+          rank_order: number
+        }
+        Update: {
+          classes_to_next_belt?: number | null
+          color_hex?: string
+          created_at?: string
+          id?: string
+          name?: string
+          rank_order?: number
+        }
+        Relationships: []
+      }
+      classes: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          modality: Database["public"]["Enums"]["modality"]
+          name: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          modality: Database["public"]["Enums"]["modality"]
+          name: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          modality?: Database["public"]["Enums"]["modality"]
+          name?: string
+        }
+        Relationships: []
+      }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          belt_id: string | null
+          birth_date: string | null
+          created_at: string
+          degree: number
+          email: string | null
+          enrollment_date: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          belt_id?: string | null
+          birth_date?: string | null
+          created_at?: string
+          degree?: number
+          email?: string | null
+          enrollment_date?: string | null
+          full_name?: string
+          id: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          belt_id?: string | null
+          birth_date?: string | null
+          created_at?: string
+          degree?: number
+          email?: string | null
+          enrollment_date?: string | null
+          full_name?: string
+          id?: string
+          phone?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_belt_id_fkey"
+            columns: ["belt_id"]
+            isOneToOne: false
+            referencedRelation: "belts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "professor" | "aluno"
+      modality:
+        | "bjj_adulto"
+        | "bjj_kids"
+        | "bjj_juvenil"
+        | "funcional"
+        | "open_mat"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +335,15 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "professor", "aluno"],
+      modality: [
+        "bjj_adulto",
+        "bjj_kids",
+        "bjj_juvenil",
+        "funcional",
+        "open_mat",
+      ],
+    },
   },
 } as const
