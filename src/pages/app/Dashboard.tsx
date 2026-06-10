@@ -1,9 +1,14 @@
 import { Link } from "react-router-dom";
-import { Award, Calendar, TrendingUp, Trophy, ChevronRight } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Award, Calendar, TrendingUp, Trophy, ChevronRight, CalendarCheck } from "lucide-react";
+import { format, startOfMonth, endOfMonth } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import AppLayout from "@/components/app/AppLayout";
 import BeltProgress from "@/components/app/BeltProgress";
 import { useProfile } from "@/hooks/useProfile";
 import { useGraduation } from "@/hooks/useGraduation";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const monthsSince = (date: string | null) => {
@@ -16,6 +21,25 @@ const monthsSince = (date: string | null) => {
 const Dashboard = () => {
   const { profile, loading: pLoading } = useProfile();
   const { data: grad, loading: gLoading } = useGraduation();
+  const { user } = useAuth();
+  const [monthlyCount, setMonthlyCount] = useState<number | null>(null);
+  const [lastGrad, setLastGrad] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!user) return;
+    (async () => {
+      const start = startOfMonth(new Date()).toISOString();
+      const end = endOfMonth(new Date()).toISOString();
+      const [{ count }, { data: last }] = await Promise.all([
+        supabase.from("attendance").select("*", { count: "exact", head: true })
+          .eq("profile_id", user.id).gte("attended_at", start).lte("attended_at", end),
+        supabase.from("graduations").select("graduated_at").eq("profile_id", user.id)
+          .order("graduated_at", { ascending: false }).limit(1).maybeSingle(),
+      ]);
+      setMonthlyCount(count ?? 0);
+      setLastGrad(last?.graduated_at ?? null);
+    })();
+  }, [user]);
 
   const loading = pLoading || gLoading;
 
@@ -65,12 +89,36 @@ const Dashboard = () => {
             loading={loading}
           />
           <StatCard
-            icon={Trophy}
-            label="Ranking"
-            value="—"
-            sub="em breve"
-            loading={loading}
+            icon={CalendarCheck}
+            label="Presenças no mês"
+            value={String(monthlyCount ?? 0)}
+            sub={format(new Date(), "MMMM", { locale: ptBR })}
+            loading={loading || monthlyCount === null}
           />
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="card-elevated p-4">
+            <div className="flex items-center gap-2 text-muted-foreground text-[10px] uppercase tracking-widest">
+              <Trophy className="w-4 h-4" /> Última graduação
+            </div>
+            <div className="mt-1 text-lg font-heading font-bold">
+              {lastGrad ? format(new Date(lastGrad), "dd 'de' MMMM 'de' yyyy", { locale: ptBR }) : "—"}
+            </div>
+          </div>
+          <div className="card-elevated p-4">
+            <div className="flex items-center gap-2 text-muted-foreground text-[10px] uppercase tracking-widest">
+              <Award className="w-4 h-4" /> Próxima faixa
+            </div>
+            <div className="mt-1 text-lg font-heading font-bold">
+              {grad?.nextBelt ? grad.nextBelt.name : "Faixa máxima"}
+              {grad?.classesRemaining !== null && grad?.nextBelt && (
+                <span className="text-sm text-muted-foreground font-normal ml-2">
+                  ({grad.classesRemaining} aulas restantes)
+                </span>
+              )}
+            </div>
+          </div>
         </div>
 
         {/* Graduation summary */}
