@@ -18,6 +18,7 @@ export type Database = {
         Row: {
           attended_at: string
           class_id: string
+          class_session_id: string | null
           created_at: string
           id: string
           notes: string | null
@@ -27,6 +28,7 @@ export type Database = {
         Insert: {
           attended_at?: string
           class_id: string
+          class_session_id?: string | null
           created_at?: string
           id?: string
           notes?: string | null
@@ -36,6 +38,7 @@ export type Database = {
         Update: {
           attended_at?: string
           class_id?: string
+          class_session_id?: string | null
           created_at?: string
           id?: string
           notes?: string | null
@@ -48,6 +51,13 @@ export type Database = {
             columns: ["class_id"]
             isOneToOne: false
             referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "attendance_class_session_id_fkey"
+            columns: ["class_session_id"]
+            isOneToOne: false
+            referencedRelation: "class_sessions"
             referencedColumns: ["id"]
           },
           {
@@ -93,6 +103,127 @@ export type Database = {
         }
         Relationships: []
       }
+      class_schedules: {
+        Row: {
+          active: boolean
+          capacity: number
+          class_id: string
+          created_at: string
+          day_of_week: number
+          end_time: string
+          id: string
+          location: string
+          professor_id: string | null
+          start_time: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          capacity?: number
+          class_id: string
+          created_at?: string
+          day_of_week: number
+          end_time: string
+          id?: string
+          location?: string
+          professor_id?: string | null
+          start_time: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          capacity?: number
+          class_id?: string
+          created_at?: string
+          day_of_week?: number
+          end_time?: string
+          id?: string
+          location?: string
+          professor_id?: string | null
+          start_time?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_schedules_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_schedules_professor_id_fkey"
+            columns: ["professor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      class_sessions: {
+        Row: {
+          cancelled: boolean
+          capacity: number
+          class_id: string
+          created_at: string
+          ends_at: string
+          id: string
+          location: string
+          professor_id: string | null
+          schedule_id: string | null
+          starts_at: string
+          updated_at: string
+        }
+        Insert: {
+          cancelled?: boolean
+          capacity?: number
+          class_id: string
+          created_at?: string
+          ends_at: string
+          id?: string
+          location?: string
+          professor_id?: string | null
+          schedule_id?: string | null
+          starts_at: string
+          updated_at?: string
+        }
+        Update: {
+          cancelled?: boolean
+          capacity?: number
+          class_id?: string
+          created_at?: string
+          ends_at?: string
+          id?: string
+          location?: string
+          professor_id?: string | null
+          schedule_id?: string | null
+          starts_at?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "class_sessions_class_id_fkey"
+            columns: ["class_id"]
+            isOneToOne: false
+            referencedRelation: "classes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_sessions_professor_id_fkey"
+            columns: ["professor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "class_sessions_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "class_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       classes: {
         Row: {
           created_at: string
@@ -116,6 +247,74 @@ export type Database = {
           name?: string
         }
         Relationships: []
+      }
+      graduations: {
+        Row: {
+          created_at: string
+          from_belt_id: string | null
+          from_degree: number
+          graduated_at: string
+          id: string
+          notes: string | null
+          professor_id: string | null
+          profile_id: string
+          to_belt_id: string
+          to_degree: number
+        }
+        Insert: {
+          created_at?: string
+          from_belt_id?: string | null
+          from_degree?: number
+          graduated_at?: string
+          id?: string
+          notes?: string | null
+          professor_id?: string | null
+          profile_id: string
+          to_belt_id: string
+          to_degree?: number
+        }
+        Update: {
+          created_at?: string
+          from_belt_id?: string | null
+          from_degree?: number
+          graduated_at?: string
+          id?: string
+          notes?: string | null
+          professor_id?: string | null
+          profile_id?: string
+          to_belt_id?: string
+          to_degree?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "graduations_from_belt_id_fkey"
+            columns: ["from_belt_id"]
+            isOneToOne: false
+            referencedRelation: "belts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "graduations_professor_id_fkey"
+            columns: ["professor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "graduations_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "graduations_to_belt_id_fkey"
+            columns: ["to_belt_id"]
+            isOneToOne: false
+            referencedRelation: "belts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
@@ -167,6 +366,90 @@ export type Database = {
           },
         ]
       }
+      reservations: {
+        Row: {
+          created_at: string
+          id: string
+          profile_id: string
+          session_id: string
+          status: Database["public"]["Enums"]["reservation_status"]
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          profile_id: string
+          session_id: string
+          status?: Database["public"]["Enums"]["reservation_status"]
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          profile_id?: string
+          session_id?: string
+          status?: Database["public"]["Enums"]["reservation_status"]
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reservations_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "reservations_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "class_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      student_notes: {
+        Row: {
+          created_at: string
+          id: string
+          note: string
+          professor_id: string
+          profile_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          note: string
+          professor_id: string
+          profile_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          note?: string
+          professor_id?: string
+          profile_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "student_notes_professor_id_fkey"
+            columns: ["professor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "student_notes_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_roles: {
         Row: {
           created_at: string
@@ -209,6 +492,7 @@ export type Database = {
         | "bjj_juvenil"
         | "funcional"
         | "open_mat"
+      reservation_status: "confirmed" | "cancelled" | "attended" | "no_show"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -344,6 +628,7 @@ export const Constants = {
         "funcional",
         "open_mat",
       ],
+      reservation_status: ["confirmed", "cancelled", "attended", "no_show"],
     },
   },
 } as const
