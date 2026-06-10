@@ -14,6 +14,16 @@ import Dashboard from "./pages/app/Dashboard";
 import Perfil from "./pages/app/Perfil";
 import Graduacao from "./pages/app/Graduacao";
 import Historico from "./pages/app/Historico";
+import Agenda from "./pages/app/Agenda";
+import ProfHome from "./pages/prof/Index";
+import ProfChamada from "./pages/prof/Chamada";
+import ProfHorarios from "./pages/prof/Horarios";
+import ProfNotas from "./pages/prof/Notas";
+import AdminHome from "./pages/admin/Index";
+import AdminAlunos from "./pages/admin/Alunos";
+import AdminTurmas from "./pages/admin/Turmas";
+import AdminGraduacoes from "./pages/admin/Graduacoes";
+import AdminPapeis from "./pages/admin/Papeis";
 import ProtectedRoute from "./components/app/ProtectedRoute";
 import { AuthProvider } from "./hooks/useAuth";
 
@@ -37,6 +47,16 @@ const App = () => (
             <Route path="/app/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
             <Route path="/app/graduacao" element={<ProtectedRoute><Graduacao /></ProtectedRoute>} />
             <Route path="/app/historico" element={<ProtectedRoute><Historico /></ProtectedRoute>} />
+            <Route path="/app/agenda" element={<ProtectedRoute><Agenda /></ProtectedRoute>} />
+            <Route path="/app/prof" element={<ProtectedRoute requireRole="professor"><ProfHome /></ProtectedRoute>} />
+            <Route path="/app/prof/chamada/:sessionId" element={<ProtectedRoute requireRole="professor"><ProfChamada /></ProtectedRoute>} />
+            <Route path="/app/prof/horarios" element={<ProtectedRoute requireRole="professor"><ProfHorarios /></ProtectedRoute>} />
+            <Route path="/app/prof/notas" element={<ProtectedRoute requireRole="professor"><ProfNotas /></ProtectedRoute>} />
+            <Route path="/app/admin" element={<ProtectedRoute requireRole="admin"><AdminHome /></ProtectedRoute>} />
+            <Route path="/app/admin/alunos" element={<ProtectedRoute requireRole="admin"><AdminAlunos /></ProtectedRoute>} />
+            <Route path="/app/admin/turmas" element={<ProtectedRoute requireRole="admin"><AdminTurmas /></ProtectedRoute>} />
+            <Route path="/app/admin/graduacoes" element={<ProtectedRoute requireRole="admin"><AdminGraduacoes /></ProtectedRoute>} />
+            <Route path="/app/admin/papeis" element={<ProtectedRoute requireRole="admin"><AdminPapeis /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
