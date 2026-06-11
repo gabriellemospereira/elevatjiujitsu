@@ -15,7 +15,7 @@ type Row = {
   roles: string[];
 };
 
-const ROLE_OPTIONS: ("admin" | "professor" | "aluno")[] = ["admin", "professor", "aluno"];
+const ROLE_OPTIONS: ("admin" | "professor" | "aluno" | "organizador")[] = ["admin", "professor", "organizador", "aluno"];
 
 const AdminPapeis = () => {
   const [rows, setRows] = useState<Row[]>([]);
@@ -40,7 +40,7 @@ const AdminPapeis = () => {
 
   useEffect(() => { load(); }, []);
 
-  const toggleRole = async (userId: string, role: "admin" | "professor" | "aluno", has: boolean) => {
+  const toggleRole = async (userId: string, role: "admin" | "professor" | "aluno" | "organizador", has: boolean) => {
     if (has) {
       const { error } = await supabase.from("user_roles").delete().eq("user_id", userId).eq("role", role);
       if (error) return toast.error(error.message);
