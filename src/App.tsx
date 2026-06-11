@@ -24,6 +24,12 @@ import AdminAlunos from "./pages/admin/Alunos";
 import AdminTurmas from "./pages/admin/Turmas";
 import AdminGraduacoes from "./pages/admin/Graduacoes";
 import AdminPapeis from "./pages/admin/Papeis";
+import Eventos from "./pages/Eventos";
+import EventoDetalhe from "./pages/EventoDetalhe";
+import MeusEventos from "./pages/app/MeusEventos";
+import OrgIndex from "./pages/org/Index";
+import OrgEventoEditor from "./pages/org/EventoEditor";
+import OrgInscricoes from "./pages/org/Inscricoes";
 import ProtectedRoute from "./components/app/ProtectedRoute";
 import { AuthProvider } from "./hooks/useAuth";
 
@@ -42,12 +48,18 @@ const App = () => (
             <Route path="/modalidades" element={<Modalidades />} />
             <Route path="/horarios" element={<Horarios />} />
             <Route path="/contato" element={<Contato />} />
+            <Route path="/eventos" element={<Eventos />} />
+            <Route path="/eventos/:slug" element={<EventoDetalhe />} />
             <Route path="/auth" element={<Auth />} />
             <Route path="/app/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/app/perfil" element={<ProtectedRoute><Perfil /></ProtectedRoute>} />
             <Route path="/app/graduacao" element={<ProtectedRoute><Graduacao /></ProtectedRoute>} />
             <Route path="/app/historico" element={<ProtectedRoute><Historico /></ProtectedRoute>} />
             <Route path="/app/agenda" element={<ProtectedRoute><Agenda /></ProtectedRoute>} />
+            <Route path="/app/eventos" element={<ProtectedRoute><MeusEventos /></ProtectedRoute>} />
+            <Route path="/app/org" element={<ProtectedRoute requireRole="organizador"><OrgIndex /></ProtectedRoute>} />
+            <Route path="/app/org/evento/:id" element={<ProtectedRoute requireRole="organizador"><OrgEventoEditor /></ProtectedRoute>} />
+            <Route path="/app/org/evento/:id/inscricoes" element={<ProtectedRoute requireRole="organizador"><OrgInscricoes /></ProtectedRoute>} />
             <Route path="/app/prof" element={<ProtectedRoute requireRole="professor"><ProfHome /></ProtectedRoute>} />
             <Route path="/app/prof/chamada/:sessionId" element={<ProtectedRoute requireRole="professor"><ProfChamada /></ProtectedRoute>} />
             <Route path="/app/prof/horarios" element={<ProtectedRoute requireRole="professor"><ProfHorarios /></ProtectedRoute>} />

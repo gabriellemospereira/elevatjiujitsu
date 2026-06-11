@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link, NavLink, useNavigate } from "react-router-dom";
-import { LayoutDashboard, User, Award, LogOut, History, Calendar, ClipboardList, Settings, Users } from "lucide-react";
+import { LayoutDashboard, User, Award, LogOut, History, Calendar, ClipboardList, Settings, Users, Trophy } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useRole } from "@/hooks/useRole";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import logo from "@/assets/Logo.png";
 const studentNav = [
   { to: "/app/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { to: "/app/agenda", label: "Agenda", icon: Calendar },
+  { to: "/app/eventos", label: "Eventos", icon: Trophy },
   { to: "/app/historico", label: "Histórico", icon: History },
   { to: "/app/graduacao", label: "Graduação", icon: Award },
   { to: "/app/perfil", label: "Perfil", icon: User },
@@ -18,6 +19,10 @@ const profNav = [
   { to: "/app/prof", label: "Professor", icon: ClipboardList },
 ];
 
+const orgNav = [
+  { to: "/app/org", label: "Organizador", icon: Trophy },
+];
+
 const adminNav = [
   { to: "/app/admin", label: "Admin", icon: Settings },
   { to: "/app/admin/alunos", label: "Alunos", icon: Users },
@@ -25,7 +30,7 @@ const adminNav = [
 
 const AppLayout = ({ children }: { children: ReactNode }) => {
   const { signOut } = useAuth();
-  const { isAdmin, isProfessor } = useRole();
+  const { isAdmin, isProfessor, isOrganizador } = useRole();
   const navigate = useNavigate();
 
   const handleSignOut = async () => {
@@ -36,6 +41,7 @@ const AppLayout = ({ children }: { children: ReactNode }) => {
   const sidebarItems = [
     ...studentNav,
     ...(isProfessor ? profNav : []),
+    ...(isOrganizador ? orgNav : []),
     ...(isAdmin ? adminNav : []),
   ];
   const mobileItems = sidebarItems.slice(0, 4);
