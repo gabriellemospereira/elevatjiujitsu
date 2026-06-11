@@ -248,6 +248,277 @@ export type Database = {
         }
         Relationships: []
       }
+      event_categories: {
+        Row: {
+          age_max: number | null
+          age_min: number | null
+          belt: string | null
+          capacity: number | null
+          created_at: string
+          event_id: string
+          gender: string | null
+          id: string
+          name: string
+          price: number | null
+          weight_max: number | null
+          weight_min: number | null
+        }
+        Insert: {
+          age_max?: number | null
+          age_min?: number | null
+          belt?: string | null
+          capacity?: number | null
+          created_at?: string
+          event_id: string
+          gender?: string | null
+          id?: string
+          name: string
+          price?: number | null
+          weight_max?: number | null
+          weight_min?: number | null
+        }
+        Update: {
+          age_max?: number | null
+          age_min?: number | null
+          belt?: string | null
+          capacity?: number | null
+          created_at?: string
+          event_id?: string
+          gender?: string | null
+          id?: string
+          name?: string
+          price?: number | null
+          weight_max?: number | null
+          weight_min?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_categories_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_media: {
+        Row: {
+          caption: string | null
+          created_at: string
+          event_id: string
+          id: string
+          media_type: string
+          url: string
+        }
+        Insert: {
+          caption?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          media_type?: string
+          url: string
+        }
+        Update: {
+          caption?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          media_type?: string
+          url?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_media_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_registrations: {
+        Row: {
+          category_id: string
+          created_at: string
+          event_id: string
+          id: string
+          notes: string | null
+          payment_status: string
+          profile_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          category_id: string
+          created_at?: string
+          event_id: string
+          id?: string
+          notes?: string | null
+          payment_status?: string
+          profile_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          category_id?: string
+          created_at?: string
+          event_id?: string
+          id?: string
+          notes?: string | null
+          payment_status?: string
+          profile_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_registrations_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "event_categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_registrations_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      event_reviews: {
+        Row: {
+          comment: string | null
+          created_at: string
+          event_id: string
+          id: string
+          profile_id: string
+          rating: number
+        }
+        Insert: {
+          comment?: string | null
+          created_at?: string
+          event_id: string
+          id?: string
+          profile_id: string
+          rating: number
+        }
+        Update: {
+          comment?: string | null
+          created_at?: string
+          event_id?: string
+          id?: string
+          profile_id?: string
+          rating?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "event_reviews_event_id_fkey"
+            columns: ["event_id"]
+            isOneToOne: false
+            referencedRelation: "events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "event_reviews_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          address: string | null
+          awards: string | null
+          banner_url: string | null
+          base_price: number | null
+          city: string
+          created_at: string
+          description: string | null
+          ends_at: string | null
+          id: string
+          latitude: number | null
+          longitude: number | null
+          name: string
+          organizer_id: string
+          organizer_name: string | null
+          registration_deadline: string | null
+          regulation_url: string | null
+          schedule: string | null
+          slug: string
+          starts_at: string
+          state: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          awards?: string | null
+          banner_url?: string | null
+          base_price?: number | null
+          city: string
+          created_at?: string
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name: string
+          organizer_id: string
+          organizer_name?: string | null
+          registration_deadline?: string | null
+          regulation_url?: string | null
+          schedule?: string | null
+          slug: string
+          starts_at: string
+          state: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          awards?: string | null
+          banner_url?: string | null
+          base_price?: number | null
+          city?: string
+          created_at?: string
+          description?: string | null
+          ends_at?: string | null
+          id?: string
+          latitude?: number | null
+          longitude?: number | null
+          name?: string
+          organizer_id?: string
+          organizer_name?: string | null
+          registration_deadline?: string | null
+          regulation_url?: string | null
+          schedule?: string | null
+          slug?: string
+          starts_at?: string
+          state?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "events_organizer_id_fkey"
+            columns: ["organizer_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       graduations: {
         Row: {
           created_at: string
